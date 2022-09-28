@@ -7,7 +7,7 @@ use async_graphql::{
     EmptySubscription, Schema,
 };
 use async_graphql_rocket::{GraphQLQuery, GraphQLRequest, GraphQLResponse};
-use graphql::model::{MySchema, Query, Mutation};
+use graphql::model::{Mutation, MySchema, Query};
 use repositories::MongoRepository;
 use rocket::{response::content, routes, State};
 

@@ -1,6 +1,8 @@
-use mongodb::{bson::extjson::de::Error, sync::Collection};
-
 use crate::models::cargo::{Cargo, CreateCargo};
+use mongodb::{
+    bson::{doc, extjson::de::Error, oid::ObjectId},
+    sync::Collection,
+};
 
 #[derive(Debug)]
 pub struct CargoRepository {
@@ -30,12 +32,23 @@ impl CargoRepository {
         Ok(cargo)
     }
 
+    pub fn get_by_id(&self, id: String) -> Result<Cargo, Error> {
+        let obj_id = ObjectId::parse_str(id).unwrap();
+        let filter = doc! {"_id": obj_id};
+        let cargo = self
+            .collection
+            .find_one(filter, None)
+            .ok()
+            .expect("Error getting cargo");
+        Ok(cargo.unwrap())
+    }
+
     pub fn get_all(&self) -> Result<Vec<Cargo>, Error> {
         let cursors = self
             .collection
             .find(None, None)
             .ok()
-            .expect("Error getting list of cargos");
+            .expect("Error getting list of cargo");
         let cargos = cursors.map(|doc| doc.unwrap()).collect();
         Ok(cargos)
     }
