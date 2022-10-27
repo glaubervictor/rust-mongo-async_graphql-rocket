@@ -1,5 +1,5 @@
 # rust-mongo-async_graphql-rocket
-Rust MongoDB Async_Graphql and Rocket
+rust mongodb async_graphql and rocket
 
 This repo demonstrates how to setup a Rust service using Rocket, async-graphql and mongodb. 
 
