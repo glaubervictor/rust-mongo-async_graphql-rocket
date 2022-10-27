@@ -1,16 +1,13 @@
+use crate::models::{response::Response, usuario::Usuario};
 use chrono::{Duration, Local};
 use jsonwebtoken::{errors::Error, DecodingKey, EncodingKey, Header, TokenData, Validation};
 use lazy_static::lazy_static;
-use rocket::http::Status;
 use rocket::outcome::Outcome;
 use rocket::request::{self, FromRequest, Request};
 use rocket::response::status;
 use rocket::serde::json::Json;
 use serde::{Deserialize, Serialize};
 use strum_macros::{Display, EnumString};
-
-use crate::constants::messages;
-use crate::models::{response::Response, usuario::Usuario};
 
 #[derive(Eq, PartialEq, Display, EnumString)]
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
@@ -42,16 +39,7 @@ impl<'r> FromRequest<'r> for UserClaim {
                         return Outcome::Success(token_data.claims);
                     }
                 }
-                return Outcome::Failure((
-                    Status::Unauthorized,
-                    status::Custom(
-                        Status::Unauthorized,
-                        Json(Response {
-                            message: String::from(messages::MESSAGE_INVALID_TOKEN),
-                            data: serde_json::to_value("").unwrap(),
-                        }),
-                    ),
-                ));
+                return Outcome::Success(UserClaim::default());
             }
         }
     }

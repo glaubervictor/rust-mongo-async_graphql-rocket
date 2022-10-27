@@ -30,7 +30,7 @@ impl Guard for RoleGuard {
                     Err(e) => Err(GraphError::new(e.message)),
                 }
             }
-            None => Err(messages::MESSAGE_INVALID_ROLE.into()),
+            None => Err(messages::MESSAGE_INVALID_TOKEN.into()),
         }
     }
 }
@@ -41,10 +41,8 @@ fn check_user_role_is_allowed(
 ) -> Result<(), CustomError> {
     let maybe_role = match getting_role_result {
         Ok(maybe_role) => maybe_role,
-        Err(e) => {
-            return Err(format!("Error while getting a user's role: {}", e.message)
-                .as_str()
-                .into())
+        Err(_e) => {
+            return Err(messages::MESSAGE_INVALID_ROLE.into());
         }
     };
 
@@ -56,7 +54,7 @@ fn check_user_role_is_allowed(
                 Err(messages::MESSAGE_INVALID_ROLE.into())
             }
         }
-        None => Err(messages::MESSAGE_INVALID_ROLE.into()),
+        None => Err(messages::MESSAGE_INVALID_TOKEN.into()),
     }
 }
 

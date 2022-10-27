@@ -33,7 +33,7 @@ impl Query {
         repository.usuario.get_by_id(id.to_string())
     }
 
-    #[graphql(guard = "RoleGuard::new(AuthRole::Admin)")]
+    #[graphql(guard = "RoleGuard::new(AuthRole::User)")]
     async fn usuario_get_all(&self, _ctx: &Context<'_>) -> Result<Vec<Usuario>, Error> {
         let repository = &_ctx.data_unchecked::<MongoRepository>();
         repository.usuario.get_all()
