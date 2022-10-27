@@ -19,7 +19,7 @@ pub enum Role {
     User,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct UserClaim {
     pub sub: String,
     pub exp: i64,
@@ -33,16 +33,7 @@ impl<'r> FromRequest<'r> for UserClaim {
 
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
         match req.headers().get_one("Authorization") {
-            None => Outcome::Failure((
-                Status::Unauthorized,
-                status::Custom(
-                    Status::Unauthorized,
-                    Json(Response {
-                        message: String::from(messages::MESSAGE_INVALID_TOKEN),
-                        data: serde_json::to_value("").unwrap(),
-                    }),
-                ),
-            )),
+            None => Outcome::Success(UserClaim::default()),
             Some(auth) => {
                 let auth_str = auth.to_string();
                 if auth_str.starts_with("Bearer") {
