@@ -1,3 +1,4 @@
+use crate::constants::messages;
 use crate::models::{response::Response, usuario::Usuario};
 use chrono::{Duration, Local};
 use jsonwebtoken::{errors::Error, DecodingKey, EncodingKey, Header, TokenData, Validation};
@@ -47,7 +48,7 @@ impl<'r> FromRequest<'r> for UserClaim {
 
 lazy_static! {
     static ref JWT_SECRET_KEY: String =
-        std::env::var("JWT_SECRET_KEY").expect("Can't read JWT_SECRET_KEY");
+        std::env::var("JWT_SECRET_KEY").expect(messages::MESSAGE_INVALID_JWT_SECRET_KEY.into());
 }
 
 pub fn generate_token(user: &Usuario) -> Result<String, Error> {
